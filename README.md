@@ -20,7 +20,7 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 ## Who Is Interact For? 
 
-* Users that want control of their app layout from the app itself.
+* Users that want control of their app layout from within the app itself.
 * Developers that are making photo editing or drawing apps.
 * Game Designers that want to make an awesome HUD. 
 * Anyone that wants to unlock the full power of SwiftUI Gestures.
