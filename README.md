@@ -1,11 +1,10 @@
 # Interact
 
-<div style="text-align:center"><img src="https://github.com/kieranb662/Interact/blob/master/InteractExample.gif" width="200"></div>
-
-
 Interact is a library for easily adding dynamic interactions with any SwiftUI View. Have you ever wanted to just move one of you views while inside the app? What about adding physics to SwiftUI? Well guess what, its all here ready for you to grab. 
 
 Drag, rotate, resize, throw,  and spin to your hearts content!
+
+ | <img src="https://github.com/kieranb662/Interact/blob/master/InteractExample.gif" width="200"> |
 
 
 
