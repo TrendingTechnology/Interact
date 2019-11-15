@@ -193,7 +193,8 @@ struct ResizableExamples: View {
 ### Important Caveats
 
 * If using a resizable modifiers do not use `.frame` or that will mess up the geometry of the view. Instead place your frame size in a `Bindable<CGSize>` and use that value for the input of the `resizable` modifier 
-    **Example of What To Do** 
+
+**Example of What To Do** 
     
 ```Swift
     struct MyCoolResizableView: View {
@@ -207,6 +208,7 @@ struct ResizableExamples: View {
 ```
 
 **Don't Do This!!!** 
+
 ```Swift
         struct MyStupidBrokenView: View {
             @State var viewSize: CGSize = CGSize(width: 150, height: 180)
