@@ -4,7 +4,7 @@ Interact is a library for easily adding dynamic interactions with any SwiftUI Vi
 
 Drag, rotate, resize, throw,  and spin to your hearts content!
 
- <img src="https://github.com/kieranb662/Interact/blob/master/InteractExample.gif" width="200"> 
+ <p align="center"><img src="https://github.com/kieranb662/Interact/blob/master/InteractExample.gif" width="200"> </p>
 
 
 
