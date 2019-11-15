@@ -32,6 +32,11 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 * Easy to use and approachable API
 * Advanced gestures with a single modifier
+* Drag Views
+* Throw Views 
+* Rotate Views
+* Spin Views 
+* Resize Views 
 * Physics based velocity and angular velocity animations 
 * Quickly add to an existing project with swift package manager 
  
