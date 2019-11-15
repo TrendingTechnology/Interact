@@ -4,6 +4,8 @@ Interact is a library for easily adding dynamic interactions with any SwiftUI Vi
 
 Drag, rotate, resize, throw,  and spin to your hearts content!
 
+if you like this check out [PartitionKit](https://github.com/kieranb662/PartitionKit)
+
  <p align="center"><img src="https://github.com/kieranb662/Interact/blob/master/InteractExample.gif" width="200"> </p>
 
 
@@ -231,5 +233,7 @@ This only applies to `resizable` modifiers.
   * Custom force fields
 * Add preference keys to get the bounds of each view to take part in collisions 
 * Create a function to only add velocity to a view if the drag release velocity is greater than a specific threshhold . 
+
+
 
 
