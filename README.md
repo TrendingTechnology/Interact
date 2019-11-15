@@ -98,6 +98,11 @@ SwiftUI's `RotationGesture` is built into these as well as an overlay handle tha
 
 These two modifiers can be initiallized with a drag or throw gesture. For Example 
 
+**Built In Features**
+
+* SwiftUI's `RotationGesture`
+* A draggable "handle" overlay that can be moved in a circular motion to rotate the view.
+
 ```Swift
 
 struct RotatableAndSpinnableExamples: View {
@@ -151,6 +156,10 @@ The possible drag types are housed in an enum `DragType` and the rotation types 
 ### Resizable 
 Unlike the last few modifiers, the resizable modifier has no velocity based equavelent. Regardless resizable modifier allows for the most interactive experience. A resizable view can also be either draggable or throwable, and it can also be rotatable or spinnable. Since their are alot of combinations I will only  show a few here.
 
+**Built In Features**
+
+* SwiftUI's `MagnificationGesture`
+* Draggable "handles" overlayed in each corner of the view for custom resizing. 
 
 
 ```Swift
@@ -230,6 +239,7 @@ This only applies to `resizable` modifiers.
 ## TODO 
 
 * Fix the issues the issues with mac, well not really fix. I just need to invert some geometry and test 
+* Add in more customizations such as limiting dragging to a single dimension or to a single path. 
 * Add in more advanced physics, I have multiple models ready but just need to run more tests before they can be included.
   * gravity
   * Air resistance 
