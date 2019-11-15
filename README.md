@@ -4,6 +4,7 @@ Interact is a library for easily adding dynamic interactions with any SwiftUI Vi
 
 Drag, rotate, resize, throw,  and spin to your hearts content!
 
+**Important** - Only for iOS, watchOS, and TVOS. I need to update some stuff for mac because not everything was working properly
 
 ## How To Use 
 
@@ -24,7 +25,7 @@ You should use one or the other, **Not** both.
 
 **Usage Example**
 
-```
+```Swift
 struct DraggableAndThrowableExamples: View {
     
     
@@ -55,7 +56,7 @@ SwiftUI's `RotationGesture` is built into these as well as an overlay handle tha
 
 These two modifiers can be initiallized with a drag or throw gesture. For Example 
 
-```
+```Swift
 
 struct RotatableAndSpinnableExamples: View {
     
@@ -92,7 +93,7 @@ struct RotatableAndSpinnableExamples: View {
 
 The possible drag types are housed in an enum `DragType` and the rotation types are housed in `RotationType`. 
 
-```
+```Swift
     enum DragType {
         case normal
         case throwable
@@ -110,7 +111,7 @@ Unlike the last few modifiers, the resizable modifier has no velocity based equa
 
 
 
-```
+```Swift
 struct ResizableExamples: View {
     @State var exampleSize1: CGSize = CGSize(width: 100, height: 200)
     @State var exampleSize2: CGSize = CGSize(width: 300, height: 250)
@@ -152,7 +153,7 @@ struct ResizableExamples: View {
 * If using a resizable modifiers do not use `.frame` or that will mess up the geometry of the view. Instead place your frame size in a `Bindable<CGSize>` and use that value for the input of the `resizable` modifier 
     **Example of What To Do** 
     
-```
+```Swift
     struct MyCoolResizableView: View {
         @State var viewSize: CGSize = CGSize(width: 150, height: 180)
         
@@ -164,7 +165,7 @@ struct ResizableExamples: View {
 ```
 
 **Don't Do This!!!** 
-```
+```Swift
         struct MyStupidBrokenView: View {
             @State var viewSize: CGSize = CGSize(width: 150, height: 180)
             
