@@ -59,7 +59,7 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 ### Draggable And Throwable 
 
-*Throwable* here means that the view can be draged and thrown, not throwable like an error.
+*Throwable* here means that the view can be dragged and thrown, not throwable like an error.
 
 The draggable and throwable modifiers are used for moving views around the screen, with the main difference being that the throwable modifier adds velocity to the view upon release. 
 
@@ -194,6 +194,8 @@ struct ResizableExamples: View {
 
 * If using a resizable modifiers do not use `.frame` or that will mess up the geometry of the view. Instead place your frame size in a `Bindable<CGSize>` and use that value for the input of the `resizable` modifier 
 
+This only applies to `resizable` modifiers. 
+
 **Example of What To Do** 
     
 ```Swift
@@ -220,7 +222,7 @@ struct ResizableExamples: View {
         
 ```
 
-This only applies to `resizable` modifiers. 
+
 
 * Do not chain any of these modifiers together, that will result in unforseen occurences. All of the combinations of modifiers have been pre-combined already. You just need to use the one specific to your use case. The math and also state can be issues so the combinations need to be made in advanced. 
 
