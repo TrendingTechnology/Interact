@@ -6,7 +6,27 @@ Interact is a library for easily adding dynamic interactions with any SwiftUI Vi
 
 Drag, rotate, resize, throw,  and spin to your hearts content!
 
-**Important** - Only for iOS, watchOS, and TVOS. I need to update some stuff for mac because not everything was working properly
+
+
+## Requirements 
+
+Interact as a default requires the SwiftUI Framework to be operational, as such only these platforms are supported:
+
+* iOS 13 or Greater 
+* tvOS 13 or Greater 
+* watchOS 6 or Greater 
+
+**Important** - I need to update some stuff for mac because not everything was working properly
+
+
+## How To Add To Your Project
+
+1. Snag that URL from the github repo 
+2. In Xcode -> File -> Swift Packages -> Add Package Dependencies 
+3. Paste the URL Into the box
+4. Specify the minimum version number (This is new so 1.0.0 and greater will work).
+
+
 
 ## How To Use 
 
