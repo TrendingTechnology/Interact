@@ -203,4 +203,15 @@ This only applies to `resizable` modifiers.
 * Do not chain any of these modifiers together, that will result in unforseen occurences. All of the combinations of modifiers have been pre-combined already. You just need to use the one specific to your use case. The math and also state can be issues so the combinations need to be made in advanced. 
 
 
+## TODO 
+
+* Fix the issues the issues with mac, well not really fix. I just need to invert some geometry and test 
+* Add in more advanced physics, I have multiple models ready but just need to run more tests before they can be included.
+  * gravity
+  * Air resistance 
+  * boundary collisions
+  * Custom force fields
+* Add preference keys to get the bounds of each view to take part in collisions 
+* Create a function to only add velocity to a view if the drag release velocity is greater than a specific threshhold . 
+
 
