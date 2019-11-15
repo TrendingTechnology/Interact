@@ -1,6 +1,8 @@
 # Interact - SwiftUI Library For Dynamic Interaction
 
-Interact is a library for easily adding dynamic interactions with any SwiftUI View. Have you ever wanted to move one of the views while inside the app? What about adding physics to SwiftUI? Well guess what, its all here ready for you to grab. Drag, rotate, resize, throw,  and spin to your hearts content!
+Interact is a library for easily adding dynamic interactions with any SwiftUI View. 
+
+Have you ever wanted to move one of the views while inside the app? What about adding physics to SwiftUI? Well guess what, its all here ready for you to grab. Drag, rotate, resize, throw,  and spin to your hearts content!
 
 If you like this library then check out [PartitionKit](https://github.com/kieranb662/PartitionKit).
 
