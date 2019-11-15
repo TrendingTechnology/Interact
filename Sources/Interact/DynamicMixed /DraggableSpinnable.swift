@@ -10,8 +10,8 @@ import SwiftUI
 
 /// # Spinnable and Draggable
 /// Modifer That allows a view to be rotated and also to spin when the rotation handle is released.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct DraggableSpinnable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct DraggableSpinnable: ViewModifier {
     
     
     @State var viewState: CGSize = .zero
@@ -19,7 +19,7 @@ struct DraggableSpinnable: ViewModifier {
     var shadowColor: Color
     var shadowRadius: CGFloat
     
-    init(shadowColor: Color? = .gray, radius: CGFloat? = 5) {
+    public init(shadowColor: Color? = .gray, radius: CGFloat? = 5) {
         self.shadowColor = shadowColor!
         self.shadowRadius = radius!
     }
@@ -184,7 +184,7 @@ struct DraggableSpinnable: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         content
             .shadow(color: shadowColor, radius: shadowRadius)
         .simultaneousGesture(dragGesture)

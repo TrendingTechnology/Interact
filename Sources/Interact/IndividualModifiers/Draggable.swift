@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct Draggable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct Draggable: ViewModifier {
     
     @State var offset: CGSize = .zero
     @GestureState var dragState: DragState = .inactive
@@ -54,7 +54,7 @@ struct Draggable: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         
         ZStack {
             content
@@ -66,8 +66,8 @@ struct Draggable: ViewModifier {
 }
 
 
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-extension View {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public extension View {
     func draggable() -> some View {
         self.modifier(Draggable())
     }

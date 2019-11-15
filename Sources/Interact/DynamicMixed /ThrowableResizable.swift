@@ -16,8 +16,8 @@ import SwiftUI
 ///
 ///
 /// - requires: A  Bindable CGSize, Also dont use the `.frame` modifier just put the size of the view in the binding.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct ThrowableResizable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct ThrowableResizable: ViewModifier {
     
     @Binding var viewSize: CGSize
     @State var throwState = VelocityState.inactive
@@ -274,7 +274,7 @@ struct ThrowableResizable: ViewModifier {
                      anchor: .topLeading)
     }
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         applyScales(
             AnyView(content
                 .frame(width: viewSize.width, height: viewSize.height, alignment: .center)

@@ -23,8 +23,8 @@ import SwiftUI
 ///
 ///  - ToDo: Give the ability to define custom handles for resizing and rotating.
 ///
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct ThrowableRotatableResizable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct ThrowableRotatableResizable: ViewModifier {
     
     // MARK: Main View Throw And Size
     @Binding var viewSize: CGSize
@@ -403,7 +403,7 @@ struct ThrowableRotatableResizable: ViewModifier {
     
     
     // MARK: Body
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         ZStack {
             applyScales(view: AnyView(content
                 .frame(width: viewSize.width, height: viewSize.height, alignment: .center)))

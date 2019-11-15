@@ -23,8 +23,8 @@ import SwiftUI
 ///
 ///  - ToDo: Give the ability to define custom handles for resizing and rotating.
 ///
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct ThrowableSpinnableResizable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct ThrowableSpinnableResizable: ViewModifier {
     
     // MARK: Main View Dragging And Size
     @Binding var viewSize: CGSize
@@ -111,7 +111,7 @@ struct ThrowableSpinnableResizable: ViewModifier {
         }
     }
     
-    init(viewSize: Binding<CGSize> ,shadowColor: Color? = .gray, radius: CGFloat? = 5) {
+    public init(viewSize: Binding<CGSize> ,shadowColor: Color? = .gray, radius: CGFloat? = 5) {
         self._viewSize = viewSize
         self.shadowColor = shadowColor!
         self.shadowRadius = radius!
@@ -451,7 +451,7 @@ struct ThrowableSpinnableResizable: ViewModifier {
     
     
     // MARK: Body
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         ZStack {
             applyScales(view: AnyView(content
                 .frame(width: viewSize.width, height: viewSize.height, alignment: .center)))

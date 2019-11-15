@@ -12,8 +12,8 @@ import SwiftUI
 /// # Rotatable Modifier
 /// Provides a handle above a view which can be dragged in a circular motion and rotates the view to the corresponding angle.
 /// Also allows the RotationGesture to be performed on the modified view.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct Rotatable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct Rotatable: ViewModifier {
     @State var angle: CGFloat = 0
     @State var dragState: RotateState = .inactive
     @State var rotationState: CGFloat = 0
@@ -101,7 +101,7 @@ struct Rotatable: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         content
             .rotationEffect(Angle(radians: Double(self.angle + dragState.deltaTheta + rotationState) ))
             .gesture(
@@ -123,8 +123,8 @@ struct Rotatable: ViewModifier {
 }
 
 
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-extension View {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public extension View {
     /// # Rotatable Modifier
     /// Provides a handle above a view which can be dragged in a circular motion and rotates the view to the corresponding angle.
     /// Also allows the RotationGesture to be performed on the modified view.

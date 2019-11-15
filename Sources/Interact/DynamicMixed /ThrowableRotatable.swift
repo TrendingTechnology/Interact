@@ -12,8 +12,8 @@ import SwiftUI
 /// Provides a handle above a view which can be dragged in a circular motion and rotates the view to the corresponding angle.
 /// Also allows the RotationGesture to be performed on the modified view.
 /// Can be drag and release to be thrown.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct ThrowableRotatable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct ThrowableRotatable: ViewModifier {
     
     @State var throwState = VelocityState.inactive
     @ObservedObject var velocityModel: VelocityModel = VelocityModel()
@@ -210,7 +210,7 @@ struct ThrowableRotatable: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         content
         .simultaneousGesture(throwGesture)
             .rotationEffect(Angle(radians: Double(self.angle + rotateState.deltaTheta + rotationState) ))

@@ -40,8 +40,8 @@ class AngularVelocityModel: ObservableObject {
 
 /// # Spinnable Modifier
 /// Modifer That allows a view to be rotated and also to spin when the rotation handle is released.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct Spinnable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct Spinnable: ViewModifier {
     
     @ObservedObject var angularVelocity: AngularVelocityModel = AngularVelocityModel()
     
@@ -170,7 +170,7 @@ struct Spinnable: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         content
             .rotationEffect(Angle(radians: Double(self.angularVelocity.angle + spinState.deltaTheta + rotationState) ))
             .simultaneousGesture(
@@ -194,8 +194,8 @@ struct Spinnable: ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-extension View {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public extension View {
     func spinnable() -> some View {
         self.modifier(Spinnable())
     }

@@ -13,7 +13,7 @@ import SwiftUI
 ///
 ///     Used to keep track of a views velocity and displacement after being thrown.
 ///     Velocity is reset whenever a drag gesture occurs.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
 class VelocityModel: ObservableObject {
     
     @Published var velocity: CGSize = .zero
@@ -46,8 +46,8 @@ class VelocityModel: ObservableObject {
 /// # Throwable
 /// Drag and throw any view with this modifier, careful though because it may get lost in the endless expanse.
 /// Optionally the shadow color and radius can be set, these are for adding a shadow effect while the view is mid drag.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct ThrowableModifier: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct ThrowableModifier: ViewModifier {
     
     /// # Velocity State
     /// Similar to the example given by apple in the composing gestures article.
@@ -133,7 +133,7 @@ struct ThrowableModifier: ViewModifier {
     }
     
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .offset(x: self.dragState.translation.width + self.velocityModel.offset.width,
                     y: self.dragState.translation.height + self.velocityModel.offset.height)
@@ -160,8 +160,8 @@ struct ThrowableModifier: ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-extension View {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public extension View {
     func throwable() -> some View {
         self.modifier(ThrowableModifier())
     }

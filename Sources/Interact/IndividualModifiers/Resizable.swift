@@ -12,8 +12,8 @@ import SwiftUI
 ///
 /// Provides the ability to resize the view with either a magnification gesture or using the corner handles overlay
 /// - requires: A  Bindable CGSize, Also dont use the `.frame` modifier just put the size of the view in the binding.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct Resizable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct Resizable: ViewModifier {
     
     @State private var viewOffset: CGSize = .zero
     @Binding var viewSize: CGSize
@@ -167,7 +167,7 @@ struct Resizable: ViewModifier {
                      anchor: .topLeading)
     }
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         applyScales(
             AnyView(content.frame(width: viewSize.width, height: viewSize.height, alignment: .center)))
             .simultaneousGesture(magnificationGesture)
@@ -182,8 +182,8 @@ struct Resizable: ViewModifier {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-extension View {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public extension View {
     func resizable(size: Binding<CGSize>) -> some View  {
         self.modifier(Resizable(viewSize: size))
     }

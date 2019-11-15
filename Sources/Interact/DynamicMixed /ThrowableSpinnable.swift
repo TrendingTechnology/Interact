@@ -12,8 +12,8 @@ import SwiftUI
 
 /// # Throwable And Spinnable
 /// Modifer That allows a view to be rotated and also to spin when the rotation handle is released.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct ThrowableSpinnable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct ThrowableSpinnable: ViewModifier {
     
     // MARK: Spin
     @ObservedObject var angularModel: AngularVelocityModel = AngularVelocityModel()
@@ -264,7 +264,7 @@ struct ThrowableSpinnable: ViewModifier {
     
     
     // MARK: Body
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         content
             .rotationEffect(Angle(radians: Double(self.angularModel.angle + spinState.deltaTheta + rotationState)))
             .simultaneousGesture(rotationGesture)

@@ -13,8 +13,8 @@ import SwiftUI
 /// # Draggable And Rotatable
 /// Provides a handle above a view which can be dragged in a circular motion and rotates the view to the corresponding angle.
 /// Also allows the RotationGesture to be performed on the modified view.
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-struct DraggableRotatable: ViewModifier {
+@available(iOS 13.0, watchOS 6.0 , tvOS 13.0, *)
+public struct DraggableRotatable: ViewModifier {
     
     @State var offset: CGSize = .zero
     @GestureState var dragState: DragState = .inactive
@@ -148,7 +148,7 @@ struct DraggableRotatable: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View  {
+    public func body(content: Content) -> some View  {
         content
         .shadow(color: shadowColor, radius: shadowRadius)
         .simultaneousGesture(dragGesture)

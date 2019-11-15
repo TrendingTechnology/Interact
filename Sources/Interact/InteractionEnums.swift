@@ -8,13 +8,13 @@
 import Foundation
 
 
-enum DragType {
+public enum DragType {
     case normal
     case throwable
 }
 
 
-enum RotationType {
+public enum RotationType {
     case normal
     case spinnable
 }
