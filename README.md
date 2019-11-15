@@ -16,7 +16,7 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 * tvOS 13 or Greater 
 * watchOS 6 or Greater 
 
-**Important** - I need to update some stuff for mac because not everything was working properly
+**Important** - macOS will be supported shortly. I need to update some stuff for mac because not everything was working properly.
 
 
 ## How To Add To Your Project
