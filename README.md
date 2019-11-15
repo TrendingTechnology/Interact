@@ -26,6 +26,15 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 * Anyone that wants to unlock the full power of SwiftUI Gestures.
 
 
+## Features
+
+* Easy to use and approachable API
+* Advanced gestures with a single modifier
+* Physics based velocity and angular velocity animations 
+* Quickly add to an existing project with swift package manager 
+ 
+
+
 ## How To Add To Your Project
 
 1. Snag that URL from the github repo 
