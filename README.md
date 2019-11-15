@@ -54,7 +54,7 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 1. Pick a view that you would like to add dynamic interaction too. 
 2. Pick one of 5 interactive modifiers 
-3. Profit 💰💰💰!!!
+3. Profit 💰💰💰
 
 
 
