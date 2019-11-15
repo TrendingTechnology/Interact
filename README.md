@@ -18,6 +18,13 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 **Important** - macOS will be supported shortly. I need to update some stuff for mac because not everything was working properly.
 
+## Who Is Interact For? 
+
+* Users that want control of their app layout from the app itself.
+* Developers that are making photo editing or drawing apps.
+* Game Designers that want to make an awesome HUD. 
+* Anyone that wants to unlock the full power of SwiftUI Gestures.
+
 
 ## How To Add To Your Project
 
