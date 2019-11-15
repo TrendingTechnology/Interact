@@ -57,6 +57,8 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 ### Draggable And Throwable 
 
+*Throwable* here means that the view can be draged and thrown, not throwable like an error.
+
 The draggable and throwable modifiers are used for moving views around the screen, with the main difference being that the throwable modifier adds velocity to the view upon release. 
 
 You should use one or the other, **Not** both. 
