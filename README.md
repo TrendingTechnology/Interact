@@ -4,9 +4,13 @@ Interact is a library for easily adding dynamic interactions with any SwiftUI Vi
 
 Have you ever wanted to move one of the views while inside the app? What about adding physics to SwiftUI? Well guess what, its all here ready for you to grab. Drag, rotate, resize, throw,  and spin to your hearts content!
 
-I am currently for hire and have a huge library of responsive components not released anywhere, hire me and you get access. If interested send an email to kb6627500@gmail.com .
+**Important** - This library just underwent a major refactoring storm, I trimmed a lot of the fat while adding a ton of new features 
+
 
 If you like this library then check out [PartitionKit](https://github.com/kieranb662/PartitionKit).
+
+I am currently for hire and have a huge library of responsive components not released anywhere, hire me and you get access. If interested send an email to kb6627500@gmail.com .
+
 
  <p align="center"><img src="https://github.com/kieranb662/Interact/blob/master/InteractExample.gif" width="200"> </p>
 
@@ -18,9 +22,9 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 
 * iOS 13 or Greater 
 * tvOS 13 or Greater 
-* watchOS 6 or Greater 
+* watchOS 6 or Greater
+* macOS 10.15 or Greater
 
-**Important** - macOS will be supported shortly. I need to update some stuff for mac because not everything was working properly.
 
 ## Who Is Interact For? 
 
@@ -41,6 +45,14 @@ Interact as a default requires the SwiftUI Framework to be operational, as such 
 * Access advanced composed gestures with a single `ViewModifier`
 * Physics based velocity and angular velocity animations 
 * Quickly add to an existing project with swift package manager 
+
+
+**Latest Features** 
+
+* macOS is now officially supported 
+* Customize resizing and rotation handles with easy access to the i`sSelected` and `isActive` properties.
+* Add in any custom physics environment for both the `spinnable` and `throwable` modifiers. 
+* Specify a threshold value for both the `spinnable` and `throwable` modifiers that prevents small velocities from being registered upon gesture end. 
  
 
 
@@ -101,14 +113,8 @@ struct DraggableAndThrowableExamples: View {
 
 Just like before with the draggable and throwable modifiers, the rotatable stops when release while the spinnable keeps rotating with the angular velocity of the release. 
 
-SwiftUI's `RotationGesture` is built into these as well as an overlay handle that can be dragged in a circular motion.
 
-These two modifiers can be initiallized with a drag or throw gesture. For Example 
 
-**Built In Features**
-
-* SwiftUI's `RotationGesture`
-* A draggable "handle" overlay that can be moved in a circular motion to rotate the view.
 
 ```Swift
 
@@ -117,26 +123,28 @@ struct RotatableAndSpinnableExamples: View {
     
     var body: some View {
     ZStack {
-        Rectangle()
-        .frame(width: 100, height: 200)
-        .overlay(Text("Rotatable"))
-        .rotatable()
-        
         Ellipse()
-        .frame(width: 100, height: 200)
-        .overlay(Text("Spinnable"))
-        .spinnable()
+            .foregroundColor(.yellow)
+            .frame(width: 100, height: 200)
+            .overlay(Text("Rotatable"))
+            .rotatable { (isSelected, isActive) in
+                Circle()
+                .foregroundColor(isActive ? .purple : .blue)
+                .frame(width: 30, height: 30)
+                .opacity(isSelected ? 1 : 0)
+        }
         
         
         Rectangle()
-        .frame(width: 200, height: 100)
-        .overlay(Text("Rotatable And Draggable"))
-        .rotatable(drag: .normal)
-        
-        Ellipse()
-        .frame(width: 200, height: 100)
-        .overlay(Text("Spinnable and Throwable"))
-        .spinnable(drag: .throwable)
+            .foregroundColor(.blue)
+            .frame(width: 150, height: 100)
+            .overlay(Text("Spinnable"))
+            .spinnable { (isSelected, isActive) in
+                    Rectangle()
+                    .foregroundColor(isActive ? .orange : .red)
+                    .frame(width: 30, height: 30)
+                    .opacity(isSelected ? 1 : 0)
+            }
         }
 
     }
@@ -145,56 +153,48 @@ struct RotatableAndSpinnableExamples: View {
 
 ```
 
-The possible drag types are housed in an enum `DragType` and the rotation types are housed in `RotationType`. 
-
-```Swift
-    enum DragType {
-        case normal
-        case throwable
-    }
-
-
-    enum RotationType {
-        case normal
-        case spinnable
-    }
-```
 
 ### Resizable 
-Unlike the last few modifiers, the resizable modifier has no velocity based equavelent. Regardless resizable modifier allows for the most interactive experience. A resizable view can also be either draggable or throwable, and it can also be rotatable or spinnable. Since their are alot of combinations I will only  show a few here.
+Unlike the last few modifiers, the resizable modifier has no velocity based equavelent. Regardless resizable modifier allows for the most interactive experience. A resizable view can also be either rotatable or spinnable. 
 
-**Built In Features**
 
-* SwiftUI's `MagnificationGesture`
-* Draggable "handles" overlayed in each corner of the view for custom resizing. 
 
 
 ```Swift
+
 struct ResizableExamples: View {
-    @State var exampleSize1: CGSize = CGSize(width: 100, height: 200)
-    @State var exampleSize2: CGSize = CGSize(width: 300, height: 250)
-    @State var exampleSize3: CGSize = CGSize(width: 200, height: 120)
-    @State var exampleSize4: CGSize = CGSize(width: 100, height: 250)
+    
     
     var body: some View {
         ZStack {
         
         Rectangle()
+        .foregroundColor(.green)
         .overlay(Text("Resizable"))
-        .resizable(size: $exampleSize1)
-        
-        Ellipse()
-        .overlay(Text("Resizable And Draggable"))
-        .resizable(size: $exampleSize2, drag: .normal)
-        
+        .resizable(initialSize: CGSize(width: 200, height: 350),
+                   resizingHandle: { (isSelected, isActive) in
+                        Rectangle()
+                        .foregroundColor(isActive ? .orange : .blue)
+                        .frame(width: 30, height: 30)
+                        .opacity(isSelected ? 1 : 0)
+                    })
         
         Rectangle()
-        .overlay(Text("Resizable And Spinnable"))
-        .resizable(size: $exampleSize3, rotate: .spinnable)
-        
-        Ellipse()
-        .overlay(Text("Resizable, Throwable And Spinnable"))
-        .resizable(size: $exampleSize3, drag: .throwable, rotate: .spinnable)
+        .foregroundColor(.green)
+        .overlay(Text("Resizable and Spinnable"))
+        .resizable(initialSize: CGSize(width: 300, height: 250),
+                   resizingHandle: { (isSelected, isActive) in
+                        Rectangle()
+                        .foregroundColor(isActive ? .orange : .blue)
+                        .frame(width: 30, height: 30)
+                        .opacity(isSelected ? 1 : 0)
+                 },
+                   rotation: .spinnable(handle: { (isSelected, isActive) in
+                        Rectangle()
+                        .foregroundColor(isActive ? .purple : .yellow)
+                        .frame(width: 30, height: 30)
+                        .opacity(isSelected ? 1 : 0)
+                   }))
         }
 
     }
@@ -208,18 +208,50 @@ struct ResizableExamples: View {
 
 ### Important Caveats
 
-* If using a resizable modifiers do not use `.frame` or that will mess up the geometry of the view. Instead place your frame size in a `Bindable<CGSize>` and use that value for the input of the `resizable` modifier 
+* If using a resizable modifiers do not use `.frame` or that will mess up the geometry of the view. Instead place your frame size within the `initialSize` parameter of `resizable`. 
+* Do not add a `rotatable` or `spinnable` modifier with a `resizable` modifier, instead use the `resizable` modifier with built in support for rotation and spinning. 
+* If you need to add dragging or throwing functionallity add this **after** you have added the resizing modifier.
 
 This only applies to `resizable` modifiers. 
+
+
+**Available Rotation Types**
+
+```Swift 
+    public enum RotationType<Handle: View>  {
+        case normal(handle: (Bool, Bool) -> Handle)
+        /// Default Values `model = AngularVelocity()`, `threshold = 0` .
+        /// *Threshold* is the angular velocity required to start spinning the view upon release of the drag gesture
+        case spinnable(model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, handle: (Bool, Bool) -> Handle)
+        
+    }
+
+```
+
 
 **Example of What To Do** 
     
 ```Swift
-    struct MyCoolResizableView: View {
-        @State var size: CGSize = CGSize(width: 150, height: 180)
-        
+    struct MyCoolResizableAndDraggableView: View {
+       
         var body: some View {
-            Rectangle().resizable(size: $size)
+            Rectangle()
+            .foregroundColor(.green)
+            .overlay(Text("Resizable and Spinnable"))
+            .resizable(initialSize: CGSize(width: 300, height: 250),
+                       resizingHandle: { (isSelected, isActive) in
+                            Rectangle()
+                            .foregroundColor(isActive ? .orange : .blue)
+                            .frame(width: 30, height: 30)
+                            .opacity(isSelected ? 1 : 0)
+                     },
+                       rotation: .spinnable(handle: { (isSelected, isActive) in
+                            Rectangle()
+                            .foregroundColor(isActive ? .purple : .yellow)
+                            .frame(width: 30, height: 30)
+                            .opacity(isSelected ? 1 : 0)
+                       }))
+            .draggable()
         }
     }
     
@@ -229,10 +261,25 @@ This only applies to `resizable` modifiers.
 
 ```Swift
         struct MyStupidBrokenView: View {
-            @State var size: CGSize = CGSize(width: 150, height: 180)
+            
             
             var body: some View {
-            Rectangle().frame(width: 100, height: 200).resizable(size: $size)
+                Rectangle()
+                .frame(width: 100, height: 200)
+                .draggable
+                .resizable(initialSize: CGSize(width: 300, height: 250),
+                resizingHandle: { (isSelected, isActive) in
+                    Rectangle()
+                    .foregroundColor(isActive ? .orange : .blue)
+                    .frame(width: 30, height: 30)
+                    .opacity(isSelected ? 1 : 0)
+            },
+                rotation: .spinnable(handle: { (isSelected, isActive) in
+                    Rectangle()
+                    .foregroundColor(isActive ? .purple : .yellow)
+                    .frame(width: 30, height: 30)
+                    .opacity(isSelected ? 1 : 0)
+                }))
             }
         }
         
@@ -240,12 +287,9 @@ This only applies to `resizable` modifiers.
 
 
 
-* Do not chain any of these modifiers together, that will result in unforseen occurences. All of the combinations of modifiers have been pre-combined already. You just need to use the one specific to your use case. The math and also state can be issues so the combinations need to be made in advanced. 
-
 
 ## TODO 
 
-* Fix the issues the issues with mac, well not really fix. I just need to invert some geometry and test 
 * Add in more customizations such as limiting dragging to a single dimension or to a single path. 
 * Add in more advanced physics, I have multiple models ready but just need to run more tests before they can be included.
   * gravity
@@ -253,7 +297,7 @@ This only applies to `resizable` modifiers.
   * boundary collisions
   * Custom force fields
 * Add preference keys to get the bounds of each view to take part in collisions 
-* Create a function to only add velocity to a view if the drag release velocity is greater than a specific threshhold . 
+
 
 
 
