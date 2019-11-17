@@ -216,10 +216,10 @@ This only applies to `resizable` modifiers.
     
 ```Swift
     struct MyCoolResizableView: View {
-        @State var viewSize: CGSize = CGSize(width: 150, height: 180)
+        @State var size: CGSize = CGSize(width: 150, height: 180)
         
         var body: some View {
-            Rectangle().resizable(size: $viewSize)
+            Rectangle().resizable(size: $size)
         }
     }
     
@@ -229,10 +229,10 @@ This only applies to `resizable` modifiers.
 
 ```Swift
         struct MyStupidBrokenView: View {
-            @State var viewSize: CGSize = CGSize(width: 150, height: 180)
+            @State var size: CGSize = CGSize(width: 150, height: 180)
             
             var body: some View {
-            Rectangle().frame(width: 100, height: 200).resizable(size: $viewSize)
+            Rectangle().frame(width: 100, height: 200).resizable(size: $size)
             }
         }
         
