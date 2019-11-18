@@ -16,39 +16,16 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
     // MARK: State
     
     @ObservedObject var resizableModel: ResizableOverlayModel<ResizingHandle>
+    @ObservedObject var magnificationGestureModel: MagnificationGestureModel
     @ObservedObject var rotationModel: RotationOverlayModel<RotationHandle>
-    @State var magnification: CGFloat = 1
-    @State var rotationGestureState: CGFloat = 0
+    @ObservedObject var rotationGestureModel: RotationGestureModel
+    
     @State var dragState: CGSize = .zero
     
     
     // MARK: Gestures
     
-    var magnificationGesture: some Gesture {
-        MagnificationGesture()
-            .onChanged({ (value) in
-                self.magnification = value
-            })
-            .onEnded { (value) in
-                self.resizableModel.size.width *= value
-                self.resizableModel.size.height *= value
-                self.magnification = 1
-        }
-        
-    }
     
-    
-    var rotationGesture: some Gesture {
-        RotationGesture()
-            .onChanged({ (value) in
-                self.rotationGestureState = CGFloat(value.radians)
-            })
-            .onEnded { (value) in
-                self.rotationModel.angle += CGFloat(value.radians)
-                self.rotationGestureState = 0
-        }
-        
-    }
     // on mac the y translation is inverted so i need to account for that, pretty goddamn annoying tbh.
     #if os(macOS)
     var dragGesture: some Gesture {
@@ -92,7 +69,7 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
     }
     
     var currentAngle: CGFloat {
-        rotationModel.angle + rotationModel.rotationHandleState.deltaTheta + rotationGestureState
+        rotationModel.angle + rotationModel.rotationHandleState.deltaTheta + rotationGestureModel.rotationState
     }
     
     
@@ -101,27 +78,26 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
         resizableModel.applyScales(view: AnyView(
             content
                 .frame(width: resizableModel.size.width, height: resizableModel.size.height)
-            ), magnification: magnification)
+        ), magnification: magnificationGestureModel.magnification)
+            .onTapGesture {
+                    withAnimation(.easeIn(duration: 0.2)) {
+                        self.rotationModel.isSelected.toggle()
+                    }
+            }
             .simultaneousGesture(dragGesture)
-            .simultaneousGesture(magnificationGesture)
+            .simultaneousGesture(magnificationGestureModel.magnificationGesture)
             .overlay(GeometryReader { proxy in
-                self.resizableModel.getOverlay(proxy: proxy, angle: self.currentAngle, magnification: self.magnification)
+                self.resizableModel.getOverlay(proxy: proxy, angle: self.currentAngle, magnification: self.magnificationGestureModel.magnification)
             })
             .rotationEffect(Angle(radians: Double(currentAngle)))
-            .simultaneousGesture(rotationGesture)
+            .simultaneousGesture(rotationGestureModel.rotationGesture)
             .overlay(GeometryReader { proxy in
                 self.rotationModel.getOverlay(proxy: proxy,
-                                              rotationGestureState: self.rotationGestureState,
-                                              magnification: self.magnification,
+                                              rotationGestureState: self.rotationGestureModel.rotationState,
+                                              magnification: self.magnificationGestureModel.magnification,
                                               dragWidths: self.dragWidths,
                                               dragTopHeights: self.dragTopHeights)
             })
-            .onTapGesture {
-                withAnimation(.easeIn(duration: 0.2)) {
-                    self.rotationModel.isSelected.toggle()
-                    self.resizableModel.isSelected.toggle()
-                }
-        }
         .offset(x: self.resizableModel.offset.width + dragState.width,
                 y: self.resizableModel.offset.height + dragState.height)
     }
@@ -130,7 +106,10 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
     public init(initialSize: CGSize, offset: Binding<CGSize>, size: Binding<CGSize>, angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, @ViewBuilder rotationHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> RotationHandle) {
         
         self.resizableModel = ResizableOverlayModel(initialSize: initialSize, offset: offset, size: size, isSelected: isSelected, handle: resizingHandle)
+        self.magnificationGestureModel = MagnificationGestureModel(size: size)
         self.rotationModel = RotationOverlayModel(angle: angle, isSelected: isSelected, handle: rotationHandle)
+        self.rotationGestureModel = RotationGestureModel(angle: angle)
+        
     }
     
     
@@ -267,7 +246,8 @@ public extension View {
     ///
     func resizable<ResizingHandle: View,
                    RotationHandle: View>(initialSize: CGSize ,
-                              @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, rotation: RotationType<RotationHandle>) -> some View  {
+                            @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle,
+                                         rotation: RotationType<RotationHandle>) -> some View  {
         switch rotation {
             
         case .normal(let handle):
