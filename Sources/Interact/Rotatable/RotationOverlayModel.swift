@@ -61,8 +61,8 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
     // MARK: Calculations 
     
     // Calculates the radius of the circle that the rotation handle is constrained to.
-    public func calculateRadius(proxy: GeometryProxy) -> CGFloat {
-        return proxy.size.height/2 + radialOffset
+    public func calculateRadius(proxy: GeometryProxy, magnification: CGFloat = 1) -> CGFloat {
+        return (proxy.size.height/2)*magnification + radialOffset
         
     }
     
@@ -88,8 +88,8 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
            let angles = angle + rotationHandleState.deltaTheta + rotationGestureState
            
            
-           let rX = sin(angles)*(calculateRadius(proxy: proxy) - (1-magnification)*proxy.size.width/2)
-           let rY = -cos(angles)*(calculateRadius(proxy: proxy) - (1-magnification)*proxy.size.height/2)
+           let rX = sin(angles)*(calculateRadius(proxy: proxy, magnification: magnification) - (1-magnification)*proxy.size.width/2)
+           let rY = -cos(angles)*(calculateRadius(proxy: proxy, magnification: magnification) - (1-magnification)*proxy.size.height/2)
            let x =   rX + cos(angle)*dragWidths/2 - sin(angle)*dragTopHeights
            let y =   rY + cos(angle)*dragTopHeights + sin(angle)*dragWidths/2
            
