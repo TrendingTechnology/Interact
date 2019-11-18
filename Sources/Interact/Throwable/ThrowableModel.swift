@@ -17,7 +17,7 @@ public class ThrowableModel: ObservableObject {
     
     // MARK: State
     @Published var throwState = ThrowState.inactive
-    @Published var offset: CGSize = .zero
+    @Binding var offset: CGSize
     var currentOffset: CGSize {
         CGSize(width: offset.width + throwState.translation.width,
                height: offset.height + throwState.translation.height)
@@ -25,6 +25,7 @@ public class ThrowableModel: ObservableObject {
     var velocityModel: VelocityModel
     /// Value used to scale the velocity of the drag gesture.
     var vScale: CGFloat = 0.5
+    var threshold: CGFloat = 0
     
     
     /// # Throw State
@@ -134,11 +135,68 @@ public class ThrowableModel: ObservableObject {
     }
     
     
+    // MARK: Throw Gesture
+    
+    #if os(macOS)
+        var throwGesture: some Gesture {
+            DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                .onChanged { (value) in
+                    self.reset()
+                    
+                    let velocity = self.calculateDragVelocity(value: value)
+                    let translation = CGSize(width: value.translation.width, height: -value.translation.height)
+                    self.throwState = .active(time: value.time,
+                                                    translation: translation,
+                                                    velocity: velocity)
+            }
+            .onEnded { (value) in
+                
+                self.offset.width += value.translation.width
+                self.offset.height -= value.translation.height
+                if self.throwState.velocityMagnitude > self.threshold {
+                    
+                    self.start()
+                    self.setVelocity()
+                    
+                }
+                self.throwState = .inactive
+            }
+        }
+    
+    #else
+    var throwGesture: some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .global)
+            .onChanged { (value) in
+                self.reset()
+                let velocity = self.calculateDragVelocity(value: value)
+                self.throwState = .active(time: value.time,
+                                                translation: value.translation,
+                                                velocity: velocity)
+        }
+        .onEnded { (value) in
+            
+            self.offset.width += value.translation.width
+            self.offset.height += value.translation.height
+            if self.throwState.velocityMagnitude > self.threshold {
+                
+                self.start()
+                self.setVelocity()
+                
+            }
+            self.throwState = .inactive
+        }
+    }
+    
+    #endif
+    
+    
     // MARK: Init
     
     /// Default model is `Velocity`
-    public init(model: VelocityModel = Velocity()) {
+    public init(offset: Binding<CGSize>, model: VelocityModel = Velocity(), threshold: CGFloat = 0) {
+        self._offset = offset
         self.velocityModel = model
+        self.threshold = threshold
     }
     
     
