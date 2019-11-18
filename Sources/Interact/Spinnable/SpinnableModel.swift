@@ -139,6 +139,7 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     }
     
     // MARK: Timer
+    
     var timer = Timer()
     var refreshRate: Double = 0.005
     

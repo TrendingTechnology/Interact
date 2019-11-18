@@ -18,6 +18,7 @@ public protocol VelocityModel {
 
 
 /// The simplest `VelocityModel` possible.
+/// Just houses the velocity you give it and gives it back when you ask for it
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public class Velocity: VelocityModel {
     public var velocity: CGSize = .zero

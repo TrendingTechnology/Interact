@@ -20,6 +20,7 @@ public protocol AngularVelocityModel {
 
 
 /// The simplest `AngularVelocityModel`
+/// It just houses the velocity.
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public class AngularVelocity: AngularVelocityModel {
     public var angularVelocity: CGFloat = 0
@@ -27,9 +28,6 @@ public class AngularVelocity: AngularVelocityModel {
         return angularVelocity
     }
     
-    public init() {
-        
-    }
     
     public init(angularVelocity: CGFloat = 0) {
         self.angularVelocity = angularVelocity
