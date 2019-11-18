@@ -10,13 +10,13 @@ import SwiftUI
 
 
 
-#if os(macOS)
+
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
     public struct ThrowableModifier: ViewModifier {
         @ObservedObject var model: ThrowableModel = ThrowableModel()
         let threshold: CGFloat
         
-        
+        #if os(macOS)
         var throwGesture: some Gesture {
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { (value) in
@@ -42,30 +42,8 @@ import SwiftUI
                 self.model.throwState = .inactive
             }
         }
-        
-        
-        init(model: VelocityModel = Velocity(), threshold: CGFloat = 30) {
-            self.threshold = threshold
-            self.model = ThrowableModel(model: model)
-        }
-        
-        public func body(content: Content) -> some View {
-            content
-                .gesture(throwGesture)
-                .offset(x: model.offset.width + model.throwState.translation.width,
-                        y: model.offset.height + model.throwState.translation.height)
-            
-        }
-    }
-
-#else
-
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-public struct ThrowableModifier: ViewModifier {
-    @ObservedObject var model: ThrowableModel = ThrowableModel()
-    let threshold: CGFloat
     
-    
+    #else
     var throwGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged { (value) in
@@ -89,18 +67,20 @@ public struct ThrowableModifier: ViewModifier {
         }
     }
     
-    
-    init(model: VelocityModel = Velocity(), threshold: CGFloat = 30) {
-        self.threshold = threshold
-        self.model = ThrowableModel(model: model)
-    }
-    
-    public func body(content: Content) -> some View {
-        content
-            .gesture(throwGesture)
-            .offset(x: model.offset.width + model.throwState.translation.width,
-                    y: model.offset.height + model.throwState.translation.height)
+    #endif
         
+        
+        init(model: VelocityModel = Velocity(), threshold: CGFloat = 30) {
+            self.threshold = threshold
+            self.model = ThrowableModel(model: model)
+        }
+        
+        public func body(content: Content) -> some View {
+            content
+                .gesture(throwGesture)
+                .offset(x: model.offset.width + model.throwState.translation.width,
+                        y: model.offset.height + model.throwState.translation.height)
+            
+        }
     }
-}
-#endif
+

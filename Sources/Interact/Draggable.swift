@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-#if os(macOS)
+
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public struct Draggable: ViewModifier {
     
@@ -22,7 +22,7 @@ public struct Draggable: ViewModifier {
         self.shadowColor = shadowColor
         self.shadowRadius = radius
     }
-    
+    #if os(macOS)
     var dragGesture: some Gesture {
         DragGesture(minimumDistance: 5, coordinateSpace: .global)
             .onChanged({ (value) in
@@ -34,32 +34,7 @@ public struct Draggable: ViewModifier {
                 self.dragState = .zero
         }
     }
-    
-    
-    
-    public func body(content: Content) -> some View  {
-        content
-            .gesture(dragGesture)
-            .offset(x: dragState.width + offset.width,
-                    y: dragState.height + offset.height)
-            .shadow(color: shadowColor, radius: dragState != .zero ? shadowRadius : 0)
-    }
-}
-
-#else
-@available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-public struct Draggable: ViewModifier {
-    
-    @State var offset: CGSize = .zero
-    @State var dragState: CGSize = .zero
-    var shadowColor: Color
-    var shadowRadius: CGFloat
-    
-    public init(shadowColor: Color = .gray, radius: CGFloat = 5) {
-        self.shadowColor = shadowColor
-        self.shadowRadius = radius
-    }
-    
+    #else
     var dragGesture: some Gesture {
         DragGesture(minimumDistance: 5, coordinateSpace: .global)
             .onChanged({ (value) in
@@ -71,18 +46,18 @@ public struct Draggable: ViewModifier {
                 self.dragState = .zero
         }
     }
-    
+    #endif
     
     
     public func body(content: Content) -> some View  {
         content
-            .simultaneousGesture(dragGesture)
+            .gesture(dragGesture)
             .offset(x: dragState.width + offset.width,
                     y: dragState.height + offset.height)
             .shadow(color: shadowColor, radius: dragState != .zero ? shadowRadius : 0)
     }
 }
-#endif
+
 
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public extension View {
