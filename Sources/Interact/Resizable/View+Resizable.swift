@@ -68,9 +68,10 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
         resizableModel.applyScales(view: AnyView(
             content
                 .frame(width: resizableModel.size.width, height: resizableModel.size.height)
-            )).simultaneousGesture(magnificationGesture)
+            ), magnification: magnification)
+            .simultaneousGesture(magnificationGesture)
             .overlay(GeometryReader { proxy in
-                self.resizableModel.getOverlay(proxy: proxy, angle: self.currentAngle)
+                self.resizableModel.getOverlay(proxy: proxy, angle: self.currentAngle, magnification: self.magnification)
             })
             .rotationEffect(Angle(radians: Double(currentAngle)))
             .simultaneousGesture(rotationGesture)
