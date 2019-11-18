@@ -76,7 +76,7 @@ public struct Draggable: ViewModifier {
     
     public func body(content: Content) -> some View  {
         content
-            .gesture(dragGesture)
+            .simultaneousGesture(dragGesture)
             .offset(x: dragState.width + offset.width,
                     y: dragState.height + offset.height)
             .shadow(color: shadowColor, radius: dragState != .zero ? shadowRadius : 0)

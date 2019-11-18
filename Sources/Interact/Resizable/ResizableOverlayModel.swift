@@ -61,7 +61,7 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
             handle(isSelected, topLeadState != .zero)
         }
         .position(x: pX, y: pY)
-        .simultaneousGesture(dragGesture)
+        .gesture(dragGesture)
         .offset(x: oX, y: oY)
     }
     
@@ -96,7 +96,7 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
             handle(isSelected, bottomLeadState != .zero)
         }
         .position(x: pX, y: pY)
-        .simultaneousGesture(dragGesture)
+        .gesture(dragGesture)
         .offset(x: oX, y: oY)
     }
     
@@ -130,7 +130,7 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
             handle(isSelected, topTrailState != .zero )
         }
         .position(x: pX, y: pY)
-        .simultaneousGesture(dragGesture)
+        .gesture(dragGesture)
         .offset(x: oX, y: oY)
     }
     
@@ -162,7 +162,7 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
             handle(isSelected, bottomTrailState != .zero)
         }
         .position(x: pX, y: pY)
-        .simultaneousGesture(dragGesture)
+        .gesture(dragGesture)
         .offset(x: oX, y: oY)
         
     }
