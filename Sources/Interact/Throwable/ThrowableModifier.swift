@@ -22,8 +22,8 @@ import SwiftUI
                 .onChanged { (value) in
                     self.model.reset()
                     
-                    var velocity = self.model.calculateDragVelocity(value: value)
-                    velocity = CGSize(width: velocity.width, height: -velocity.height)
+                    let velocity = self.model.calculateDragVelocity(value: value)
+//                    velocity = CGSize(width: velocity.width, height: -velocity.height)
                     let translation = CGSize(width: value.translation.width, height: -value.translation.height)
                     self.model.throwState = .active(time: value.time,
                                                     translation: translation,
