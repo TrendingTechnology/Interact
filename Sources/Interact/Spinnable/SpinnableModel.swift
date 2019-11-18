@@ -15,11 +15,16 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     
     // MARK: State
     var model: AngularVelocityModel
+    /// This is kind of like the angular equivalent of a draggable view's `offset`.
     @Published var angle: CGFloat = 0
+    /// Describes the angular drag state of the rotation handle. 
     @Published var spinState: SpinState = .inactive
     @Published var isSelected: Bool = false
+    /// Value describing the distance from the top of the view to the rotation handle.
     var radialOffset: CGFloat = 50
+    /// Value used to scale down the velocity of a drag.
     let vScale: CGFloat = 0.5
+    /// minimum angular velocity required to start spinning the view.
     var threshold: CGFloat = 0
     var handle: (Bool, Bool) -> Handle
     

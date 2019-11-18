@@ -8,13 +8,48 @@
 import Foundation
 import SwiftUI
 
-
+/// Here I combined the rotation and resizable modifiers into one. I tried my best since the last version to simplify and reuse code that had been repeated again and again
+/// It may not be 100% perfect but I needed to make some compromises in the end about what I was really trying to accomplish. I would love to have the ability to combine modifiers, arbitrarily throught the dot syntax but its just not so easy. I tried implementing preference keys with data for all the different types of modifiers I created, but the overall design wasn't sound. I quickly realized that It was going to be way more work and labor intensive then this project itself.
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: ViewModifier {
     
+    // MARK: State
+    
     @ObservedObject var resizableModel: ResizableOverlayModel<ResizingHandle>
     @ObservedObject var rotationModel: RotationOverlayModel<RotationHandle>
+    @State var  magnification: CGFloat = 1
+    @State var  rotationGestureState: CGFloat = 0
     
+    
+    // MARK: Gestures
+    
+    var magnificationGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged({ (value) in
+                self.magnification = value
+            })
+            .onEnded { (value) in
+                self.resizableModel.size.width *= value
+                self.resizableModel.size.height *= value
+                self.magnification = 1
+        }
+        
+    }
+    
+    
+    var rotationGesture: some Gesture {
+        RotationGesture()
+            .onChanged({ (value) in
+                self.rotationGestureState = CGFloat(value.radians)
+            })
+            .onEnded { (value) in
+                self.rotationModel.angle += CGFloat(value.radians)
+                self.rotationGestureState = 0
+        }
+        
+    }
+    
+    // MARK: Convienence Values
     var dragWidths: CGFloat {
         return resizableModel.topLeadState.width + resizableModel.topTrailState.width + resizableModel.bottomLeadState.width + resizableModel.bottomTrailState.width
     }
@@ -23,19 +58,26 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
         return resizableModel.topLeadState.height + resizableModel.topTrailState.height
     }
     
+    var currentAngle: CGFloat {
+        rotationModel.angle + rotationModel.rotationHandleState.deltaTheta + rotationGestureState
+    }
+    
     
     
     public func body(content: Content) -> some View  {
         resizableModel.applyScales(view: AnyView(
             content
                 .frame(width: resizableModel.size.width, height: resizableModel.size.height)
-        ))
+            )).simultaneousGesture(magnificationGesture)
             .overlay(GeometryReader { proxy in
-                self.resizableModel.getOverlay(proxy: proxy, angle: self.rotationModel.angle + self.rotationModel.rotationHandleState.deltaTheta)
+                self.resizableModel.getOverlay(proxy: proxy, angle: self.currentAngle)
             })
-            .rotationEffect(Angle(radians: Double(self.rotationModel.angle + self.rotationModel.rotationHandleState.deltaTheta)))
+            .rotationEffect(Angle(radians: Double(currentAngle)))
+            .simultaneousGesture(rotationGesture)
             .overlay(GeometryReader { proxy in
                 self.rotationModel.getOverlay(proxy: proxy,
+                                              rotationGestureState: self.rotationGestureState,
+                                              magnification: self.magnification,
                                               dragWidths: self.dragWidths,
                                               dragTopHeights: self.dragTopHeights)
             })
