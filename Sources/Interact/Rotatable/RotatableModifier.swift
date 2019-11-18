@@ -15,8 +15,8 @@ public struct Rotatable<Handle: View>: ViewModifier {
 
     
     /// The first boolean gives access to the isSelected property of the rotationModel, while the second boolean represents the drag state of the rotation overlay handle .
-    public init(@ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
-        self.rotationModel = RotationOverlayModel(handle: handle)
+    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
+        self.rotationModel = RotationOverlayModel(angle: angle, isSelected: isSelected, handle: handle)
     }
     
     

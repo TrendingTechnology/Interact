@@ -16,10 +16,10 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     // MARK: State
     var model: AngularVelocityModel
     /// This is kind of like the angular equivalent of a draggable view's `offset`.
-    @Published var angle: CGFloat = 0
+    @Binding var angle: CGFloat
     /// Describes the angular drag state of the rotation handle. 
     @Published var spinState: SpinState = .inactive
-    @Published var isSelected: Bool = false
+    @Binding var isSelected: Bool
     /// Value describing the distance from the top of the view to the rotation handle.
     var radialOffset: CGFloat = 50
     /// Value used to scale down the velocity of a drag.
@@ -195,7 +195,9 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     
     // MARK: Init
     
-    public init(model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
+    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
+        self._angle = angle
+        self._isSelected = isSelected
         self.model = model
         self.handle = handle
         self.threshold = threshold

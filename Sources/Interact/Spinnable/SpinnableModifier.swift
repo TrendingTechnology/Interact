@@ -12,8 +12,8 @@ import SwiftUI
 public struct Spinnable<Handle: View>: ViewModifier {
     @ObservedObject var spinModel: SpinnableModel<Handle>
     
-    public init(model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
-        self.spinModel = SpinnableModel(model: model, threshold: threshold, handle: handle)
+    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+        self.spinModel = SpinnableModel(angle: angle, isSelected: isSelected, model: model, threshold: threshold, handle: handle)
         
     }
     

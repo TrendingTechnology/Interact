@@ -20,9 +20,9 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
     @Published var bottomLeadState: CGSize = .zero
     @Published var topTrailState: CGSize = .zero
     @Published var bottomTrailState: CGSize = .zero
-    @Published var offset: CGSize = .zero
-    @Published var size: CGSize
-    @Published var isSelected: Bool = false
+    @Binding var offset: CGSize
+    @Binding var size: CGSize
+    @Binding var isSelected: Bool
     
     
 
@@ -220,8 +220,10 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
     
     // MARK: Init
     
-    public init(initialSize: CGSize, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
-        self.size = initialSize
+    public init(initialSize: CGSize = CGSize(width: 100, height: 200), offset: Binding<CGSize>, size: Binding<CGSize>, isSelected: Binding<Bool>, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+        self._size = size
+        self._offset = offset
+        self._isSelected = isSelected
         self.handle = handle
     }
     

@@ -15,9 +15,9 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
     // MARK: State
     // distance from the top of the view to the rotation handle
     var radialOffset: CGFloat = 50
-    @Published var angle: CGFloat = 0
+    @Binding var angle: CGFloat
     @Published var rotationHandleState: RotationState = .inactive
-    @Published var isSelected: Bool = false
+    @Binding var isSelected: Bool
     
     var handle: (Bool, Bool) -> Handle
     
@@ -124,7 +124,9 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
     
     // MARK: Init
     
-    public init(@ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+        self._angle = angle
+        self._isSelected = isSelected
         self.handle = handle
     }
     

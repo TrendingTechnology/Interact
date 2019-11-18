@@ -15,8 +15,8 @@ public struct Resizable<Handle: View>: ViewModifier {
     
     @ObservedObject var resizableModel: ResizableOverlayModel<Handle>
     
-    public init(initialSize: CGSize, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
-        self.resizableModel = ResizableOverlayModel(initialSize: initialSize, handle: handle)
+    public init(initialSize: CGSize, offset: Binding<CGSize>, size: Binding<CGSize>, isSelected: Binding<Bool>, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+        self.resizableModel = ResizableOverlayModel(initialSize: initialSize, offset: offset, size: size, isSelected: isSelected, handle: handle)
     }
     
     

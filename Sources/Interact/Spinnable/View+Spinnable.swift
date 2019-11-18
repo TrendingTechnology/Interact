@@ -41,6 +41,8 @@ public extension View {
     ///
     ///
     func spinnable<Handle: View>(model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) -> some View {
-        self.modifier(Spinnable(model: model, threshold: threshold, handle: handle))
+        self.dependencyBuffer(initialSize: .zero) { (_, _, angle, isSelected)  in
+            Spinnable(angle: angle, isSelected: isSelected, model: model, threshold: threshold, handle: handle)
+        }
     }
 }

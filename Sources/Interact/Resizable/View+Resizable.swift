@@ -127,10 +127,10 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
     }
     
     
-    public init(initialSize: CGSize, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, @ViewBuilder rotationHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> RotationHandle) {
+    public init(initialSize: CGSize, offset: Binding<CGSize>, size: Binding<CGSize>, angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, @ViewBuilder rotationHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> RotationHandle) {
         
-        self.resizableModel = ResizableOverlayModel(initialSize: initialSize, handle: resizingHandle)
-        self.rotationModel = RotationOverlayModel(handle: rotationHandle)
+        self.resizableModel = ResizableOverlayModel(initialSize: initialSize, offset: offset, size: size, isSelected: isSelected, handle: resizingHandle)
+        self.rotationModel = RotationOverlayModel(angle: angle, isSelected: isSelected, handle: rotationHandle)
     }
     
     
@@ -178,11 +178,11 @@ public struct ResizableSpinnable<ResizingHandle: View, RotationHandle: View>: Vi
     
     
     
-    public init(initialSize: CGSize, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle,
+    public init(initialSize: CGSize, offset: Binding<CGSize>, size: Binding<CGSize>, angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle,
                 model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0 , @ViewBuilder rotationHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> RotationHandle) {
         
-        self.resizableModel = ResizableOverlayModel(initialSize: initialSize, handle: resizingHandle)
-        self.rotationModel = SpinnableModel(model: model, threshold: threshold, handle: rotationHandle)
+        self.resizableModel = ResizableOverlayModel(initialSize: initialSize, offset: offset, size: size, isSelected: isSelected, handle: resizingHandle)
+            self.rotationModel = SpinnableModel(angle: angle, isSelected: isSelected, model: model, threshold: threshold, handle: rotationHandle)
     }
 }
 
@@ -217,7 +217,9 @@ public extension View {
     ///
     ///
     func resizable<Handle: View>(initialSize: CGSize, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) -> some View {
-        self.modifier(Resizable(initialSize: initialSize, handle: handle))
+        self.dependencyBuffer(initialSize: initialSize) { (offset, size, _, isSelected)  in
+            Resizable(initialSize: initialSize, offset: offset, size: size, isSelected: isSelected, handle: handle)
+        }
     }
     
     
@@ -269,10 +271,18 @@ public extension View {
         switch rotation {
             
         case .normal(let handle):
-            return AnyView(self.modifier(ResizableRotatable(initialSize: initialSize, resizingHandle: resizingHandle, rotationHandle: handle)))
+            return AnyView(
+                self.dependencyBuffer(initialSize: initialSize, modifier: { (offset, size, angle, isSelected)  in
+                    ResizableRotatable(initialSize: initialSize, offset: offset, size: size, angle: angle, isSelected: isSelected, resizingHandle: resizingHandle, rotationHandle: handle)
+                })
+                )
             
         case .spinnable(let model, let threshold, let handle):
-            return AnyView(self.modifier(ResizableSpinnable(initialSize: initialSize, resizingHandle: resizingHandle, model: model, threshold: threshold, rotationHandle: handle)))
+            return AnyView(
+                self.dependencyBuffer(initialSize: initialSize, modifier: { (offset, size, angle, isSelected)  in
+                    ResizableSpinnable(initialSize: initialSize, offset: offset, size: size, angle: angle, isSelected: isSelected, resizingHandle: resizingHandle, model: model, threshold: threshold, rotationHandle: handle)
+                })
+            )
         }
     }
 }
