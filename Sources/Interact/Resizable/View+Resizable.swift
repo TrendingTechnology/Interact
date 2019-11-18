@@ -50,6 +50,20 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
         
     }
     
+    #if os(macOS)
+    var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 5, coordinateSpace: .global)
+            .onChanged({ (value) in
+                self.dragState = CGSize(width: value.translation.width, height: -value.translation.height)
+            })
+            .onEnded { (value) in
+                self.resizableModel.offset.width += value.translation.width
+                self.resizableModel.offset.height -= value.translation.height
+                self.dragState = .zero
+        }
+    }
+    
+    #else
     var dragGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged({ (value) in
@@ -63,7 +77,7 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
         
         
     }
-    
+    #endif
     
     
     
