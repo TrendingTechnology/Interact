@@ -17,6 +17,7 @@ public extension View {
     ///
     ///     - model: A type conforming to the `VelocityModel` protocol, the default value is `Velocity()` which provides the most basic velocity animation.
     ///     - threshold: The magnitude required to throw the view upon release of the drag gesture. **default value** = 0
+    ///
     func throwable(model: VelocityModel = Velocity(), threshold: CGFloat = 0) -> some View {
         self.modifier(ThrowableModifier(model: model, threshold: threshold))
     }

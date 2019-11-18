@@ -101,7 +101,7 @@ public struct ResizableSpinnable<ResizingHandle: View, RotationHandle: View>: Vi
     
     
     public init(initialSize: CGSize, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle,
-         model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0 , @ViewBuilder rotationHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> RotationHandle) {
+                model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0 , @ViewBuilder rotationHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> RotationHandle) {
         
         self.resizableModel = ResizableOverlayModel(initialSize: initialSize, handle: resizingHandle)
         self.rotationModel = SpinnableModel(model: model, threshold: threshold, handle: rotationHandle)
@@ -138,34 +138,56 @@ public extension View {
     ///               })
     ///
     ///
-    func resizable<Handle: View>(initialSize: CGSize, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) -> some View {
+    func resizable<Handle: View>(initialSize: CGSize, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) -> some View {
         self.modifier(Resizable(initialSize: initialSize, handle: handle))
     }
     
     
-    /// Use this modifier for creating resizable and rotatable views. Similar to the normal resizable modifier but with an additional parameter to specify the type of rotation (normal or spinnable).
-    /// The two boolean values in the handle closure give access to the `isSelected` and `isActive` values of the modified view and handle respectively.
+    
+    /// # Resizable and Rotatable
     ///
-    /// **Example** Here a resizable and spinnable green rectangle is created, both the resizing and rotation handles become visible when the view is selected,
-    /// The resizing handles change from  blue to orange when dragged while the rotation handle changes from yellow to purple when dragged.
+    ///     Use this modifier for creating resizable and rotatable views. Similar to the normal
+    ///     resizable modifier but with an additional parameter to specify the type of rotation
+    ///     (normal or spinnable).
+    ///
+    ///     The two boolean values in the handle closure give access to the `isSelected`
+    ///     and `isActive` values of the modified view and handle respectively.
+    ///
+    ///
+    ///     - parameters:
+    ///
+    ///     - handle: A view that will be used as the handle of the overlay, the `Bool` values in the closure give access to the `isSelected` and `isActive`properties  of the modified view and handle respectively.
+    ///     -  isSelected: `Bool `value that is toggled on or off when the view is tapped.
+    ///     -  isActive: `Bool` value that is true while the individual handle view is dragging and false otherwise.
+    ///
+    ///  - note: @ViewBuilder is used here because each of the handles will be wrapping
+    ///          in a container ZStack,this way its one less Grouping to write in the final
+    ///          syntax.  
+    ///
+    ///
+    /// **Example**   Here a resizable and  spinnable  rectangle is created. both the resizing and rotation handles become visible when the view is selected,
+    ///             The resizing handles change from  blue to orange when dragged while the rotation handle changes from yellow to purple when dragged.
     ///
     ///         Rectangle()
     ///         .foregroundColor(.green)
     ///         .resizable(initialSize: CGSize(width: 200, height: 350),
     ///                    resizingHandle: { (isSelected, isActive) in
-    ///                         Rectangle().foregroundColor(isActive ? .orange : .blue)
+    ///                         Rectangle()
+    ///                         .foregroundColor(isActive ? .orange : .blue)     // Color changes from blue to orange while handle is being dragged
     ///                         .frame(width: 30, height: 30)
-    ///                         .opacity(isSelected ? 1 : 0)
+    ///                         .opacity(isSelected ? 1 : 0)                               //  Handle view  becomes visible while the main view is selected
     ///         },
     ///           rotation: .spinnable(handle: { (isSelected, isActive) in
-    ///                         Rectangle()
+    ///                         Circle()
     ///                         .foregroundColor(isActive ? .purple : .yellow)
     ///                         .frame(width: 30, height: 30)
     ///                         .opacity(isSelected ? 1 : 0)
     ///           }))
     ///
     ///
-    func resizable<ResizingHandle: View, RotationHandle: View>(initialSize: CGSize ,@ViewBuilder resizingHandle: @escaping (Bool, Bool) -> ResizingHandle, rotation: RotationType<RotationHandle>) -> some View  {
+    func resizable<ResizingHandle: View,
+                   RotationHandle: View>(initialSize: CGSize ,
+                              @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, rotation: RotationType<RotationHandle>) -> some View  {
         switch rotation {
             
         case .normal(let handle):

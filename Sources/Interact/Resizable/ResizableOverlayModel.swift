@@ -12,6 +12,10 @@ import SwiftUI
 /// Uses a generic type `Handle` to create the views in each of the four corners of the overlay.
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public class ResizableOverlayModel<Handle: View>: ObservableObject {
+    
+    
+    // MARK: State
+    
     @Published var topLeadState: CGSize = .zero
     @Published var bottomLeadState: CGSize = .zero
     @Published var topTrailState: CGSize = .zero
@@ -20,13 +24,11 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
     @Published var size: CGSize
     @Published var isSelected: Bool = false
     
+    
+
+    // MARK: Overlay
+    
     var handle: (Bool, Bool) -> Handle
-    
-    
-    public init(initialSize: CGSize, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
-        self.size = initialSize
-        self.handle = handle
-    }
     
     
     func getTopLeading(proxy: GeometryProxy, angle: CGFloat = 0, magnification: CGFloat = 1) -> some View{
@@ -178,6 +180,8 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
     }
     
     
+    // MARK: Scaling
+    
     func calculateScaleWidth(value: CGFloat) -> CGFloat {
         return (size.width + value)/size.width
     }
@@ -210,6 +214,15 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
             .scaleEffect(CGSize(width: calculateScaleWidth(value: bottomTrailState.width),
                                 height: calculateScaleHeight(value: bottomTrailState.height)),
                          anchor: .topLeading)
+    }
+    
+    
+    
+    // MARK: Init
+    
+    public init(initialSize: CGSize, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+        self.size = initialSize
+        self.handle = handle
     }
     
     

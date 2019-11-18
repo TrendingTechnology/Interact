@@ -159,7 +159,7 @@ public class SpinnableModel<Handle: View>: ObservableObject {
         model.angularVelocity = 0
     }
     
-    
+    // MARK: Overlay
     
     public func getOverlay(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> some View {
         ZStack {
@@ -188,6 +188,7 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     
     
     // MARK: Init
+    
     public init(model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
         self.model = model
         self.handle = handle
