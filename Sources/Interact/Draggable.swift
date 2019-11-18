@@ -86,6 +86,12 @@ public struct Draggable: ViewModifier {
 
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
 public extension View {
+    
+    /// Add To Drag Your View Around The Screen
+    ///
+    ///   - note:
+    ///         If you want to resize or rotate you view as well make sure to this modifier last in the chain.  Not doing so will have unintended effects. The order draggable and throwable modifiers will always come last.
+    ///
     func draggable() -> some View {
         self.modifier(Draggable())
     }

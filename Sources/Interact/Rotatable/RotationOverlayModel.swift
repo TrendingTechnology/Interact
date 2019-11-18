@@ -27,6 +27,7 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
         case inactive
         case active(translation: CGSize, deltaTheta: CGFloat)
         
+        /// `DragGesture`'s translation value
         var translation: CGSize {
             switch self {
             case .active(let translation, _):
@@ -35,7 +36,7 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
                 return .zero
             }
         }
-        
+        /// Value calculated by restricting the translation to a specific radius.
         var deltaTheta: CGFloat {
             switch self {
             case .active(_, let angle):
