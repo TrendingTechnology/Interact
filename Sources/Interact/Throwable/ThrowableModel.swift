@@ -24,7 +24,7 @@ public class ThrowableModel: ObservableObject {
     }
     var velocityModel: VelocityModel
     /// Value used to scale the velocity of the drag gesture.
-    var vScale: CGFloat = 0.5
+    var vScale: CGFloat = 0.3
     var threshold: CGFloat = 0
     
     
@@ -119,13 +119,13 @@ public class ThrowableModel: ObservableObject {
     // MARK: Calculations
     
     /// Calculates the velocity of the drag gesture.
-    func calculateDragVelocity(value: DragGesture.Value) -> CGSize {
+    func calculateDragVelocity(translation: CGSize, time: Date) -> CGSize {
         if throwState.time == nil {
             return .zero
         } else {
-            let deltaX = value.translation.width-throwState.translation.width
-            let deltaY = value.translation.height-throwState.translation.height
-            let deltaT = CGFloat(throwState.time!.timeIntervalSince(value.time))
+            let deltaX = translation.width-throwState.translation.width
+            let deltaY = translation.height-throwState.translation.height
+            let deltaT = CGFloat(throwState.time!.timeIntervalSince(time))
             
             let vX = -vScale*deltaX/deltaT
             let vY = -vScale*deltaY/deltaT
@@ -142,9 +142,8 @@ public class ThrowableModel: ObservableObject {
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { (value) in
                     self.reset()
-                    
-                    let velocity = self.calculateDragVelocity(value: value)
                     let translation = CGSize(width: value.translation.width, height: -value.translation.height)
+                    let velocity = self.calculateDragVelocity(translation: translation, time: value.time)
                     self.throwState = .active(time: value.time,
                                                     translation: translation,
                                                     velocity: velocity)
@@ -168,7 +167,7 @@ public class ThrowableModel: ObservableObject {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged { (value) in
                 self.reset()
-                let velocity = self.calculateDragVelocity(value: value)
+                let velocity = self.calculateDragVelocity(translation: value.translation, time: value.time)
                 self.throwState = .active(time: value.time,
                                                 translation: value.translation,
                                                 velocity: velocity)
