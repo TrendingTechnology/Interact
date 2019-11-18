@@ -36,6 +36,7 @@ public class ThrowableModel: ObservableObject {
             translation: CGSize,
             velocity: CGSize)
         
+        /// `DragGesture`'s translation value
         var time: Date? {
             switch self {
             case .active(let time, _, _):
@@ -44,7 +45,7 @@ public class ThrowableModel: ObservableObject {
                 return nil
             }
         }
-        
+        /// `DragGesture`s time value
         var translation: CGSize {
             switch self {
             case .active(_, let translation, _):
@@ -53,7 +54,7 @@ public class ThrowableModel: ObservableObject {
                 return .zero
             }
         }
-        
+        /// Velocity calculated from the difference in translations divided by the difference in times from the old state to the current state to the ne
         var velocity: CGSize {
             switch self {
             case .active(_, _, let velocity):
@@ -62,7 +63,7 @@ public class ThrowableModel: ObservableObject {
                 return .zero
             }
         }
-        
+        /// The magnitude of the velocity vector, used in comparison with the `threshold` value, if greater then throw object  if less then dont.
         var velocityMagnitude: CGFloat {
             switch self {
             case .active(_, _, let v):
