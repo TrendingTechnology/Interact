@@ -17,8 +17,9 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
     
     @ObservedObject var resizableModel: ResizableOverlayModel<ResizingHandle>
     @ObservedObject var rotationModel: RotationOverlayModel<RotationHandle>
-    @State var  magnification: CGFloat = 1
-    @State var  rotationGestureState: CGFloat = 0
+    @State var magnification: CGFloat = 1
+    @State var rotationGestureState: CGFloat = 0
+    @State var dragState: CGSize = .zero
     
     
     // MARK: Gestures
@@ -49,6 +50,24 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
         
     }
     
+    var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged({ (value) in
+                self.dragState = value.translation
+            })
+            .onEnded { (value) in
+                self.resizableModel.offset.width += value.translation.width
+                self.resizableModel.offset.height += value.translation.height
+                self.dragState = .zero
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
     // MARK: Convienence Values
     var dragWidths: CGFloat {
         return resizableModel.topLeadState.width + resizableModel.topTrailState.width + resizableModel.bottomLeadState.width + resizableModel.bottomTrailState.width
@@ -69,6 +88,7 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
             content
                 .frame(width: resizableModel.size.width, height: resizableModel.size.height)
             ), magnification: magnification)
+            .simultaneousGesture(dragGesture)
             .simultaneousGesture(magnificationGesture)
             .overlay(GeometryReader { proxy in
                 self.resizableModel.getOverlay(proxy: proxy, angle: self.currentAngle, magnification: self.magnification)
@@ -88,7 +108,8 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
                     self.resizableModel.isSelected.toggle()
                 }
         }
-        .offset(self.resizableModel.offset)
+        .offset(x: self.resizableModel.offset.width + dragState.width,
+                y: self.resizableModel.offset.height + dragState.height)
     }
     
     
