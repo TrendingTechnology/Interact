@@ -51,7 +51,7 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View>: Vi
     }
     
     var dragGesture: some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged({ (value) in
                 self.dragState = value.translation
             })
