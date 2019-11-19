@@ -57,12 +57,13 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View, R: 
             .rotationEffect(Angle(radians: Double(currentAngle)))
             .simultaneousGesture(rotationGestureModel.rotationGesture)
             .overlay(GeometryReader { proxy in
-                self.rotationModel.getOverlay(proxy: proxy,
-                                              rotationGestureState: self.rotationGestureModel.rotationState,
-                                              magnification: self.magnificationGestureModel.magnification,
-                                              dragWidths: self.dragWidths,
-                                              dragTopHeights: self.dragTopHeights)
-            })
+                ZStack {
+                    self.rotationModel.getOverlay(proxy: proxy,
+                    rotationGestureState: self.rotationGestureModel.rotationState,
+                    magnification: self.magnificationGestureModel.magnification,
+                    dragWidths: self.dragWidths,
+                    dragTopHeights: self.dragTopHeights)
+                }})
             .offset(x: self.resizableModel.offset.width + dragGestureModel.dragState.width,
                 y: self.resizableModel.offset.height + dragGestureModel.dragState.height)
     }
