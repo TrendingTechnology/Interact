@@ -21,7 +21,7 @@ public struct Spinnable<Handle: View>: ViewModifier {
     
     public func body(content: Content) -> some View  {
         content
-            .rotationEffect(Angle(radians: Double(spinModel.angle + spinModel.spinState.deltaTheta + rotationGestureModel.rotationState)))
+            .rotationEffect(Angle(radians: Double(spinModel.angle + spinModel.gestureState.deltaTheta + rotationGestureModel.rotationState)))
             .gesture(rotationGestureModel.rotationGesture)
             .overlay(
                 GeometryReader { proxy in

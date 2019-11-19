@@ -11,15 +11,16 @@ import SwiftUI
 
 /// Data model describing a view that can be rotated and spun with a handle.
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-public class SpinnableModel<Handle: View>: ObservableObject {
+public class SpinnableModel<Handle: View>: ObservableObject, RotationModel {
+    
     
     // MARK: State
     var model: AngularVelocityModel
     /// This is kind of like the angular equivalent of a draggable view's `offset`.
-    @Binding var angle: CGFloat
+    @Binding public var angle: CGFloat
     /// Describes the angular drag state of the rotation handle. 
-    @Published var spinState: SpinState = .inactive
-    @Binding var isSelected: Bool
+    @Published public var gestureState: RotationOverlayState = SpinState.inactive
+    @Binding public var isSelected: Bool
     /// Value describing the distance from the top of the view to the rotation handle.
     var radialOffset: CGFloat = 50
     /// Value used to scale down the velocity of a drag.
@@ -33,7 +34,7 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     /// Used to keep track of a drag gesture that is constrained to a circle.
     /// Allows access to variables such as the change in angle `deltaTheta`
     ///  or the `angularVelocity` of a `DragGesture` Constrained to a radius.
-    enum SpinState {
+    enum SpinState: RotationOverlayState {
         case inactive
         case active(translation: CGSize, time: Date?, deltaTheta: CGFloat, angularVelocity: CGFloat)
         
@@ -88,7 +89,7 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     
     
     public func setVelocity() {
-        model.angularVelocity = spinState.angularVelocity
+        model.angularVelocity = (gestureState as! SpinState).angularVelocity
     }
     
     
@@ -104,7 +105,7 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     // All X components contribute half of their value.
     public func calculateRotationalOffset(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> CGSize {
         
-        let angles = angle + spinState.deltaTheta + rotationGestureState
+        let angles = angle + gestureState.deltaTheta + rotationGestureState
         
         let rX = sin(angles)*(calculateRadius(proxy: proxy) - (1-magnification)*proxy.size.width/2)
         let rY = -cos(angles)*(calculateRadius(proxy: proxy) - (1-magnification)*proxy.size.height/2)
@@ -132,12 +133,12 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     /// Calculates the angular velocity of the rotational drag
     public func calculateDragAngularVelocity(proxy: GeometryProxy, value: DragGesture.Value) -> CGFloat {
         
-        if self.spinState.time == nil {
+        if (self.gestureState as! SpinState).time == nil {
             return 0
         }
         let radius = calculateRadius(proxy: proxy)
-        let deltaA = self.calculateDeltaTheta(radius: radius, translation: value.translation)-self.spinState.deltaTheta
-        let deltaT = CGFloat(self.spinState.time!.timeIntervalSince(value.time))
+        let deltaA = self.calculateDeltaTheta(radius: radius, translation: value.translation)-self.gestureState.deltaTheta
+        let deltaT = CGFloat((self.gestureState as! SpinState).time!.timeIntervalSince(value.time))
         let aV = -vScale*deltaA/deltaT
         
         return aV
@@ -167,9 +168,9 @@ public class SpinnableModel<Handle: View>: ObservableObject {
     
     // MARK: Overlay
     
-    public func getOverlay(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> some View {
-        ZStack {
-            handle(isSelected, spinState.isActive)
+    public func getOverlay(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> AnyView {
+        AnyView(ZStack {
+            handle(isSelected, (gestureState as! SpinState).isActive)
         }.offset(calculateRotationalOffset(proxy: proxy, rotationGestureState: rotationGestureState, magnification: magnification, dragWidths: dragWidths, dragTopHeights: dragTopHeights))
             .gesture(
                 DragGesture()
@@ -178,18 +179,18 @@ public class SpinnableModel<Handle: View>: ObservableObject {
                         let radius = self.calculateRadius(proxy: proxy)
                         let deltaTheta = self.calculateDeltaTheta(radius: radius, translation: value.translation)
                         let angularVelocity = self.calculateDragAngularVelocity(proxy: proxy, value: value)
-                        self.spinState = .active(translation: value.translation, time: value.time, deltaTheta: deltaTheta, angularVelocity: angularVelocity)
+                        self.gestureState = SpinState.active(translation: value.translation, time: value.time, deltaTheta: deltaTheta, angularVelocity: angularVelocity)
                     })
                     .onEnded({ (value) in
                         let radius = self.calculateRadius(proxy: proxy)
                         self.angle += self.calculateDeltaTheta(radius: radius, translation: value.translation)
-                        if abs(self.spinState.angularVelocity) > self.threshold {
+                        if abs( (self.gestureState as! SpinState).angularVelocity ) > self.threshold {
                             self.start()
                             self.setVelocity()
                         }
-                        self.spinState = .inactive
+                        self.gestureState = SpinState.inactive
                     })
-        )
+        ))
     }
     
     

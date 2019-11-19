@@ -23,7 +23,7 @@ public struct Rotatable<Handle: View>: ViewModifier {
     
     public func body(content: Content) -> some View  {
         content
-            .rotationEffect(Angle(radians: Double(rotationModel.angle + rotationModel.rotationHandleState.deltaTheta + rotationGestureModel.rotationState)))
+            .rotationEffect(Angle(radians: Double(rotationModel.angle + rotationModel.gestureState.deltaTheta + rotationGestureModel.rotationState)))
             .gesture(rotationGestureModel.rotationGesture)
             .overlay(
                 GeometryReader { proxy in

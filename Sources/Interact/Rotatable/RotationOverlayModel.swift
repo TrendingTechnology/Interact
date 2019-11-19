@@ -9,21 +9,21 @@ import Foundation
 import SwiftUI
 
 @available(iOS 13.0, macOS 10.15, watchOS 6.0 , tvOS 13.0, *)
-public class RotationOverlayModel<Handle: View>: ObservableObject {
+public class RotationOverlayModel<Handle: View>: ObservableObject, RotationModel {
     
     
     // MARK: State
     // distance from the top of the view to the rotation handle
     var radialOffset: CGFloat = 50
-    @Binding var angle: CGFloat
-    @Published var rotationHandleState: RotationState = .inactive
-    @Binding var isSelected: Bool
+    @Binding public var angle: CGFloat
+    @Published public var gestureState: RotationOverlayState = RotationState.inactive
+    @Binding public var isSelected: Bool
     
     var handle: (Bool, Bool) -> Handle
     
     /// Use to model the state of the rotation handles drag gesture.
     /// The movement of the rotation handle is restricted to the radius of the circle given by half the height of the rotated view plus the `radialOffset`
-    enum RotationState {
+    enum RotationState: RotationOverlayState {
         case inactive
         case active(translation: CGSize, deltaTheta: CGFloat)
         
@@ -85,7 +85,7 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
     // All X components contribute half of their value.
     public func calculateRotationalOffset(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> CGSize {
            
-           let angles = angle + rotationHandleState.deltaTheta + rotationGestureState
+           let angles = angle + gestureState.deltaTheta + rotationGestureState
            
            
            let rX = sin(angles)*(calculateRadius(proxy: proxy, magnification: magnification))
@@ -98,9 +98,9 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
        }
     
     
-    public func getOverlay(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> some View {
-        ZStack {
-            handle(isSelected, rotationHandleState.isActive)
+    public func getOverlay(proxy: GeometryProxy, rotationGestureState: CGFloat = 0, magnification: CGFloat = 1, dragWidths: CGFloat = 0, dragTopHeights: CGFloat = 0) -> AnyView {
+        AnyView(ZStack {
+            handle(isSelected, (gestureState as! RotationState).isActive)
         }
         .offset(calculateRotationalOffset(proxy: proxy, rotationGestureState: rotationGestureState, magnification: magnification, dragWidths: dragWidths, dragTopHeights: dragTopHeights))
         .gesture(
@@ -108,14 +108,14 @@ public class RotationOverlayModel<Handle: View>: ObservableObject {
                 .onChanged({ (value) in
                     let radius = self.calculateRadius(proxy: proxy)
                     let deltaTheta = self.calculateDeltaTheta(radius: radius, translation: value.translation)
-                    self.rotationHandleState = .active(translation: value.translation, deltaTheta: deltaTheta)
+                    self.gestureState = RotationState.active(translation: value.translation, deltaTheta: deltaTheta)
                 })
                 .onEnded({ (value) in
                     let radius = self.calculateRadius(proxy: proxy)
                     self.angle += self.calculateDeltaTheta(radius: radius, translation: value.translation)
-                    self.rotationHandleState = .inactive
+                    self.gestureState = RotationState.inactive
                 })
-        )
+        ))
     }
     
     
