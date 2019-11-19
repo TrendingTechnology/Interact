@@ -248,8 +248,7 @@ public extension View {
     ///
     ///
     func resizable<ResizingHandle: View,
-                   RotationHandle: View,
-                    R: RotationModel>(initialSize: CGSize ,
+                   RotationHandle: View>(initialSize: CGSize ,
                             @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle,
                                          rotation: RotationType<RotationHandle>) -> some View  {
         switch rotation {
