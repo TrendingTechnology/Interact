@@ -25,7 +25,9 @@ public struct Spinnable<Handle: View>: ViewModifier {
             .gesture(rotationGestureModel.rotationGesture)
             .overlay(
                 GeometryReader { proxy in
-                    self.spinModel.getOverlay(proxy: proxy)
+                    ZStack {
+                        self.spinModel.getOverlay(proxy: proxy)
+                    }
             })
             .onTapGesture {
                 withAnimation(.easeIn(duration: 0.2)) {

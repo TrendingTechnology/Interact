@@ -27,7 +27,9 @@ public struct Rotatable<Handle: View>: ViewModifier {
             .gesture(rotationGestureModel.rotationGesture)
             .overlay(
                 GeometryReader { proxy in
-                    self.rotationModel.getOverlay(proxy: proxy)
+                    ZStack {
+                        self.rotationModel.getOverlay(proxy: proxy)
+                    }
                 }
         )
             .onTapGesture {
