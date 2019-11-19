@@ -19,9 +19,13 @@ public struct Spinnable<Handle: View>: ViewModifier {
         
     }
     
+    var currentAngle: CGFloat {
+        spinModel.angle + spinModel.gestureState.deltaTheta + rotationGestureModel.rotationState
+    }
+    
     public func body(content: Content) -> some View  {
         content
-            .rotationEffect(Angle(radians: Double(spinModel.angle + spinModel.gestureState.deltaTheta + rotationGestureModel.rotationState)))
+            .rotationEffect(Angle(radians: Double(currentAngle)))
             .gesture(rotationGestureModel.rotationGesture)
             .overlay(
                 GeometryReader { proxy in

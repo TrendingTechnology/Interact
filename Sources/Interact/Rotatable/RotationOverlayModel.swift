@@ -124,7 +124,7 @@ public class RotationOverlayModel<Handle: View>: ObservableObject, RotationModel
     
     // MARK: Init
     
-    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, handle: @escaping (Bool, Bool) -> Handle) {
         self._angle = angle
         self._isSelected = isSelected
         self.handle = handle

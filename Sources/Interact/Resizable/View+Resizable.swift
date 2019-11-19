@@ -69,7 +69,7 @@ public struct ResizableRotatable<ResizingHandle: View, RotationHandle: View, R: 
     }
     
     
-    public init(initialSize: CGSize, offset: Binding<CGSize>, size: Binding<CGSize>, angle: Binding<CGFloat>, isSelected: Binding<Bool>, @ViewBuilder resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, rotationModel: R) {
+    public init(initialSize: CGSize, offset: Binding<CGSize>, size: Binding<CGSize>, angle: Binding<CGFloat>, isSelected: Binding<Bool>, resizingHandle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> ResizingHandle, rotationModel: R) {
         
         self.resizableModel = ResizableOverlayModel(initialSize: initialSize, offset: offset, size: size, isSelected: isSelected, handle: resizingHandle)
         self.magnificationGestureModel = MagnificationGestureModel(size: size)

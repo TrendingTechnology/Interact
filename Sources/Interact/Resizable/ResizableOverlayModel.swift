@@ -220,7 +220,7 @@ public class ResizableOverlayModel<Handle: View>: ObservableObject {
     
     // MARK: Init
     
-    public init(initialSize: CGSize = CGSize(width: 100, height: 200), offset: Binding<CGSize>, size: Binding<CGSize>, isSelected: Binding<Bool>, @ViewBuilder handle: @escaping (Bool, Bool) -> Handle) {
+    public init(initialSize: CGSize = CGSize(width: 100, height: 200), offset: Binding<CGSize>, size: Binding<CGSize>, isSelected: Binding<Bool>, handle: @escaping (Bool, Bool) -> Handle) {
         self._size = size
         self._offset = offset
         self._isSelected = isSelected

@@ -147,7 +147,7 @@ public class SpinnableModel<Handle: View>: ObservableObject, RotationModel {
     // MARK: Timer
     
     var timer = Timer()
-    var refreshRate: Double = 0.005
+    var refreshRate: Double = 0.02
     
     
     func start() {
@@ -196,7 +196,7 @@ public class SpinnableModel<Handle: View>: ObservableObject, RotationModel {
     
     // MARK: Init
     
-    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, @ViewBuilder handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
+    public init(angle: Binding<CGFloat>, isSelected: Binding<Bool>, model: AngularVelocityModel = AngularVelocity(), threshold: CGFloat = 0, handle: @escaping (_ isSelected: Bool, _ isActive: Bool) -> Handle) {
         self._angle = angle
         self._isSelected = isSelected
         self.model = model
